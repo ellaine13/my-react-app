@@ -52,6 +52,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      column: null,
     }
   }
 
@@ -69,7 +70,18 @@ class Game extends React.Component {
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
+      column: this.columnDetect(i),
     });
+  }
+
+  columnDetect(i) {
+    if (i === 0 || i === 3 || i === 6) {
+      return '1';
+    } else if (i === 1 || i === 4 || i === 7) {
+      return '2';
+    } else {
+      return '3';
+    }
   }
 
   jumpTo(step) {
@@ -80,6 +92,7 @@ class Game extends React.Component {
   }
 
   render() {
+    const column = this.state.column;
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
@@ -92,6 +105,7 @@ class Game extends React.Component {
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <div>Позиция. Колонка: {column}, строка: ...</div>
         </li>
       );
     });
