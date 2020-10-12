@@ -53,6 +53,7 @@ class Game extends React.Component {
       stepNumber: 0,
       xIsNext: true,
       column: null,
+      row: null,
     }
   }
 
@@ -71,17 +72,18 @@ class Game extends React.Component {
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
       column: this.columnDetect(i),
+      row: this.rowDetect(i),
     });
   }
 
   columnDetect(i) {
-    if (i === 0 || i === 3 || i === 6) {
-      return '1';
-    } else if (i === 1 || i === 4 || i === 7) {
-      return '2';
-    } else {
-      return '3';
-    }
+    let colsModulo = i % 3;
+
+    return colsModulo + 1;
+  }
+
+  rowDetect(i) {
+    
   }
 
   jumpTo(step) {
@@ -93,6 +95,7 @@ class Game extends React.Component {
 
   render() {
     const column = this.state.column;
+    const row = this.state.row;
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
@@ -102,10 +105,14 @@ class Game extends React.Component {
         'Перейти к ходу №' + move :
         'К началу игры';
 
+      const position = move ?
+        <div>Позиция. Колонка: {column}, строка: {row}</div> :
+        null;
+
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
-          <div>Позиция. Колонка: {column}, строка: ...</div>
+          {position}
         </li>
       );
     });
