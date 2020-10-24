@@ -83,7 +83,9 @@ class Game extends React.Component {
   }
 
   rowDetect(i) {
-    
+    let rowNumber = Math.floor(i/3);
+
+    return rowNumber + 1;
   }
 
   jumpTo(step) {
