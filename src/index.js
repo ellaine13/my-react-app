@@ -49,6 +49,8 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        col: null,
+        row: null,
       }],
       stepNumber: 0,
       xIsNext: true,
@@ -96,6 +98,11 @@ class Game extends React.Component {
     });
   }
 
+  renderMove = (move, stepNumber, col, row) => {
+    const text = `Позиция. Колонка: ${col}, строка: ${row}`;
+    return <div>{move === stepNumber ? (<b>{text}</b>) : text}</div>;
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -107,7 +114,7 @@ class Game extends React.Component {
         'К началу игры';
 
       const position = move ?
-        <div>Позиция. Колонка: {history[move].col}, строка: {history[move].row}</div> :
+        this.renderMove(move, this.state.stepNumber, history[move].col, history[move].row) :
         null;
 
       return (
