@@ -49,6 +49,8 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        col: null,
+        row: null,
       }],
       stepNumber: 0,
       xIsNext: true,
@@ -59,6 +61,9 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+    const col = this.columnDetect(i);
+    const row = this.rowDetect(i);
+
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
@@ -66,10 +71,24 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([{
         squares: squares,
+        col: col,
+        row: row,
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
+  }
+
+  columnDetect(i) {
+    let colsModulo = i % 3;
+
+    return colsModulo + 1;
+  }
+
+  rowDetect(i) {
+    let rowNumber = Math.floor(i/3);
+
+    return rowNumber + 1;
   }
 
   jumpTo(step) {
@@ -77,6 +96,11 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: (step % 2) === 0,
     });
+  }
+
+  renderMove = (move, stepNumber, col, row) => {
+    const text = `Позиция. Колонка: ${col}, строка: ${row}`;
+    return <div>{move === stepNumber ? (<b>{text}</b>) : text}</div>;
   }
 
   render() {
@@ -89,9 +113,14 @@ class Game extends React.Component {
         'Перейти к ходу №' + move :
         'К началу игры';
 
+      const position = move ?
+        this.renderMove(move, this.state.stepNumber, history[move].col, history[move].row) :
+        null;
+
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          {position}
         </li>
       );
     });
