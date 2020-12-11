@@ -52,6 +52,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      sorterDown: true,
     }
   }
 
@@ -96,6 +97,12 @@ class Game extends React.Component {
     });
   }
 
+  orderSort() {
+    this.setState({
+      sorterDown: !this.state.sorterDown,
+    });
+  }
+
   renderMove = (move, stepNumber, col, row) => {
     const text = `Позиция. Колонка: ${col}, строка: ${row}`;
     return <div>{move === stepNumber ? (<b>{text}</b>) : text}</div>;
@@ -106,7 +113,7 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    let moves = history.map((step, move) => {
       const desc = move ?
         'Перейти к ходу №' + move :
         'К началу игры';
@@ -123,12 +130,19 @@ class Game extends React.Component {
       );
     });
 
+    if (this.state.sorterDown === false) {
+      moves = moves.reverse();
+    }
+
     let status;
     if (winner) {
       status = 'Выиграл ' + winner;
     } else {
       status = 'Следующий ход: ' + (this.state.xIsNext ? 'X' : '0');
     }
+
+    const sortingOrder = this.state.sorterDown ? '↓' : '↑';
+    let sorter = <button onClick={ () => this.orderSort() }>Отсортировать {sortingOrder}</button>
 
     return (
       <div className="game">
@@ -141,6 +155,7 @@ class Game extends React.Component {
         <div className="game-info">
           <div>{status}</div>
           <ol>{moves}</ol>
+          <div className="moves-sorter">{sorter}</div>
         </div>
       </div>
     );
