@@ -52,7 +52,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
-      sorterDown: true,
+      sorterDescending: true,
     }
   }
 
@@ -99,7 +99,7 @@ class Game extends React.Component {
 
   orderSort() {
     this.setState({
-      sorterDown: !this.state.sorterDown,
+      sorterDescending: !this.state.sorterDescending,
     });
   }
 
@@ -130,7 +130,7 @@ class Game extends React.Component {
       );
     });
 
-    if (this.state.sorterDown === false) {
+    if (this.state.sorterDescending === false) {
       moves = moves.reverse();
     }
 
@@ -141,7 +141,7 @@ class Game extends React.Component {
       status = 'Следующий ход: ' + (this.state.xIsNext ? 'X' : '0');
     }
 
-    const sortingOrder = this.state.sorterDown ? '↓' : '↑';
+    const sortingOrder = this.state.sorterDescending ? '↓' : '↑';
     let sorter = <button onClick={ () => this.orderSort() }>Отсортировать {sortingOrder}</button>
 
     return (
